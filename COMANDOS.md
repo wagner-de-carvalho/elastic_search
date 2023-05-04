@@ -21,6 +21,9 @@ Fazendo analogia entre entre Elasticsearch e SQL:
 
 - `curl -H "Content-Type: application/json" -XPUT '127.0.0.1:9200/movies/movie/109487' -d '{ "genre": ["IMAX", "Sci-Fi"], "title": "Interstellar", "year": 2014 }'` = requisição curl tipo PUT ao elasticsearch.
 
+### SSH
+
+
 ### Dados para teste
 - Baixar `wget http://media.sundog-soft.com/es7/shakes-mapping.json`
 - `curl -H 'Content-Type: application/json' -XPUT 127.0.0.1:9200/shakespeare --data-binary @shakes-mapping.json`
