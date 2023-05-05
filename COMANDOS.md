@@ -61,9 +61,20 @@ Fazendo analogia entre entre Elasticsearch e SQL:
     post http://127.0.0.1:9200/movies/_doc/109487/_update
   {
     "doc": {
-          "title": "Interestellar"
+        "title": "Interestellar"
     }
+  }
+```
+
+- Atualizar filme condicionalmente:
+
+```json
+    post http://127.0.0.1:9200/movies/_doc/109487?if_seq_no=7&if_primary_term=2
+  {
+    "doc": {
+        "title": "Interstellar Foo"
     }
+  }
 ```
 
 - inserir em lote:
@@ -81,6 +92,12 @@ put http://127.0.0.1:9200/movies/_bulk?pretty
 
 ```json
     get http://127.0.0.1:9200/movies/_search?pretty
+```
+
+- Buscar filme por id:
+
+```json
+    get http://127.0.0.1:9200/movies/_doc/109487?pretty
 ```
 
 - Excluir filme:
