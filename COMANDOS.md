@@ -33,7 +33,9 @@ Fazendo analogia entre entre Elasticsearch e SQL:
     put http://127.0.0.1:9200/movies
     {
         "mappings": {
-            "properties": { "year": {"type": "date" }}
+            "properties": {
+                "year": {"type": "date" }
+            }
         }
     }
 ```
@@ -106,6 +108,12 @@ put http://127.0.0.1:9200/movies/_bulk?pretty
     delete http://127.0.0.1:9200/movies/_doc/58559
 ```
 
+- Excluir índice:
+
+```json
+    delete http://127.0.0.1:9200/movies
+```
+
 ### Dados para teste
 
 - Baixar `wget http://media.sundog-soft.com/es7/shakes-mapping.json`
@@ -113,3 +121,54 @@ put http://127.0.0.1:9200/movies/_bulk?pretty
 - `wget http://media.sundog-soft.com/es7/shakespeare_7.0.json`
 - `curl -H 'Content-Type: application/json' -XPOST '127.0.0.1:9200/shakespeare/_bulk?pretty' --data-binary @shakespeare_7.0.json`
 - `curl -H 'Content-Type: application/json' -XGET '127.0.0.1:9200/shakespeare/_search?pretty' -d '{"query" : {"match_phrase" : {"text_entry":"to be or not to be"}}}'`
+
+### Analyzers
+
+- Keyword type mapping = às vezes campos de texto devem ter a correspondência exata. Usar `keyword mapping` em vez de texto.
+- Text Type mapping = busca em campos de texto vai retornar qualquer coisa, mesmo que com baixa relevância.
+  Depende do `analyzer`, o resultado será sensível a maiúsculas e minúsculas , flexões (`stemmed`), remoção `stopwords`, aplicação de sinônimos, etc.
+  Busca com múltiplos termos não precisa ter uma correspondência de todos.
+
+**Exemplos**:
+
+- Busca usando analyzer, busca parcial
+
+```json
+    get http://127.0.0.1:9200/movies/_search?pretty
+    {
+        "query": {
+            "match": {
+                "title": "Star Trek"
+            }
+        }
+    }
+```
+
+- Busca usando analyzer, busca exata
+
+```json
+    get http://127.0.0.1:9200/movies/_search?pretty
+    {
+        "query": {
+            "match_phrase": {
+                "genre": "sci"
+            }
+        }
+    }
+```
+
+**Mapping**:
+
+```json
+    put http://127.0.0.1:9200/movies
+    {
+        "mappings": {
+            "properties": {
+                "id": {"type": "integer"},
+                "year": {"type": "date"},
+                "genre": {"type": "keyword"},
+                "title": {"type": "text", "analyzer": "english"}
+            }
+        }
+    }
+```
