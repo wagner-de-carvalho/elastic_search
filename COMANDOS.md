@@ -55,6 +55,17 @@ Fazendo analogia entre entre Elasticsearch e SQL:
     }
 ```
 
+- Atualizar filme parcialmente:
+
+```json
+    post http://127.0.0.1:9200/movies/_doc/109487/_update
+  {
+    "doc": {
+          "title": "Interestellar"
+    }
+    }
+```
+
 - inserir em lote:
 
 ```json
@@ -70,6 +81,12 @@ put http://127.0.0.1:9200/movies/_bulk?pretty
 
 ```json
     get http://127.0.0.1:9200/movies/_search?pretty
+```
+
+- Excluir filme:
+
+```json
+    delete http://127.0.0.1:9200/movies/_doc/58559
 ```
 
 ### Dados para teste
