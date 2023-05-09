@@ -172,3 +172,58 @@ put http://127.0.0.1:9200/movies/_bulk?pretty
         }
     }
 ```
+
+### Relacionamentos
+
+Inserção em lote usando **curl**:
+
+- `curl -XPUT 127.0.0.1:9200/_bulk?pretty --data-binary @series.json` = inserção de dados em lote via curl, no qual o nome do arquivo de dados é **@series.json**.
+
+Mapeamento de relacionamento **franquia-file**:
+
+```json
+    put http://127.0.0.1:9200/series
+    {
+        "mappings": {
+            "properties": {
+                "film_to_franchise": {"franchise": "film"}
+            }
+        }
+    }
+```
+
+Busca de filmes por franquia:
+
+```json
+get http://127.0.0.1:9200/series/_search?pretty
+{
+    "query": {
+        "has_parent": {
+            "parent_type": "franchise",
+            "query": {
+                "match": {
+                    "title": "Star Wars"
+                }
+            }
+        }
+    }
+}
+```
+
+Busca de filme relacionado com franquia:
+
+```json
+get http://127.0.0.1:9200/series/_search?pretty
+{
+    "query": {
+        "has_child": {
+            "type": "film",
+            "query": {
+                "match": {
+                    "title": "The Force Awakens"
+                }
+            }
+        }
+    }
+}
+```
